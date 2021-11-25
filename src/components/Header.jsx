@@ -1,14 +1,31 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import HeaderSelects from './HeaderSelects';
+import { API_URL, API_KEY } from '../api/api';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { getBooks } from '../store/reducers/booksSlice';
+import BooksList from './BooksList';
 
 function Header() {
   const [searchValue, setSearchValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
-    console.log(searchValue);
+    if (searchValue.length === 0) {
+      return alert('Пожалуйста, заполните поле ввода!');
+    }
+    setIsLoading(true);
+    setTimeout(() => {
+      const response = axios
+        .get(`${API_URL}${searchValue}&:keyes&key=${API_KEY}`)
+        .then(res => dispatch(getBooks(res.data)))
+        .catch(err => alert(err.message))
+        .finally(() => setIsLoading(false));
+    }, 500);
   };
 
   const handleSearchValue = e => {
@@ -32,6 +49,7 @@ function Header() {
           </SearchButton>
         </SearchForm>
         <HeaderSelects />
+        {isLoading ? <h1>Идёт загрузка</h1> : <BooksList />}
       </Wrap>
     </HeaderWrap>
   );

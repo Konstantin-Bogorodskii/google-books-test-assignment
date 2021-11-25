@@ -47,13 +47,12 @@ const Select = styled.select`
   background: var(--color-alto);
   border: 0;
   border-radius: 0;
-  -webkit-appearance: none;
   cursor: pointer;
 
   &:focus {
     z-index: 3;
     color: #394349;
-    outline: 2px solid var(--color-blue);
+    outline: 1px solid var(--color-blue);
   }
 `;
 const Option = styled.option`

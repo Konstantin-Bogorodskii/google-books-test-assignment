@@ -60,4 +60,4 @@ const SelectsGroup = styled.div`
   }
 `;
 
-export default HeaderSelects;
+export default React.memo(HeaderSelects);
