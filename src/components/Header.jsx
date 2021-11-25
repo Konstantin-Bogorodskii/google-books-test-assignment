@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import HeaderSelects from './HeaderSelects';
 
 function Header() {
   const [searchValue, setSearchValue] = useState('');
@@ -30,6 +31,7 @@ function Header() {
             <img src="/images/search.svg" alt="Search for book" />
           </SearchButton>
         </SearchForm>
+        <HeaderSelects />
       </Wrap>
     </HeaderWrap>
   );
@@ -89,8 +91,9 @@ const SearchForm = styled.form`
   border-radius: 0.6rem;
   height: 4.5rem;
   width: 100%;
-  max-width: 85rem;
+  max-width: 70rem;
   z-index: 20;
+  margin-bottom: var(--main-offset);
 `;
 const SearchInput = styled.input`
   display: inline-block;
@@ -125,6 +128,6 @@ const SearchButton = styled.button`
   &:hover,
   &:focus {
     opacity: 0.7;
-    background: var(--color-dark);
+    background: var(--color-blue);
   }
 `;

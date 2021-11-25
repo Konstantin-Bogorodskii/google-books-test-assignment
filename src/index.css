@@ -5,6 +5,7 @@
   --color-light: #e4e4e4;
   --color-alto: #dddddd;
   --color-grey: #444444e7;
+  --color-blue: #49aff2;
 
   /* Margins */
 
@@ -79,34 +80,4 @@ a:focus {
   margin: 0 auto;
   padding: 0 15px;
   max-width: 1210px;
-}
-
-.btn-reset {
-  border: none;
-  padding: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-.btn {
-  overflow: hidden;
-  border-radius: 0.4rem;
-  padding: 1.5rem 4.5rem;
-  font: var(--middle-font);
-  transition: color 0.3s ease-in-out, background 0.3s linear, box-shadow 500ms linear;
-  /* 
-  &--primary {
-    border: 1px solid var(--color-surf);
-    color: var(--color-surf);
-
-    &:hover {
-      box-shadow: 0 0 5px var(--color-surf), 0 0 12px var(--color-surf-hover);
-      color: var(--color-white);
-      background: linear-gradient(
-        117deg,
-        rgba(8, 253, 216, 1) 0%,
-        rgb(0, 199, 169) 100%
-      );
-    }
-  } */
 }
