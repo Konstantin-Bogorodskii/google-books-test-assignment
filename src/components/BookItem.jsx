@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 function BookItem({ book }) {
   const {
@@ -9,20 +10,22 @@ function BookItem({ book }) {
     categories = [''],
   } = book.volumeInfo;
   return (
-    <Wrap>
-      <img src={imageLinks.smallThumbnail} alt={title} />
-      <BookText>
-        <Category>{String(categories).split(/[\&,]+/)[0]}</Category>
-        <h3>{title}</h3>
-        <p>{authors.join(', ')}</p>
-      </BookText>
-    </Wrap>
+    <Link to={`/book/${book.id}`}>
+      <Wrap>
+        <img src={imageLinks.smallThumbnail} alt={title} />
+        <BookText>
+          <Category>{String(categories).split(/[\&,]+/)[0]}</Category>
+          <h3>{title}</h3>
+          <p>{authors.join(', ')}</p>
+        </BookText>
+      </Wrap>
+    </Link>
   );
 }
 
 const Wrap = styled.div`
   background-color: var(--color-light);
-  border: none;
+  border: 1px solid var(--color-dark);
   box-shadow: 2px 2px 6px 0px var(--color-dark);
   border-radius: 0.5rem;
   padding: var(--small-offset);

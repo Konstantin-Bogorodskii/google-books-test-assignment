@@ -12,9 +12,13 @@ import {
 } from '../store/reducers/booksSlice';
 import Loader from '../UI/Loader';
 
-function Header({ searchValue, handleSearchValue }) {
+function Header() {
   const dispatch = useDispatch();
   const { books, isLoading, startIndex } = useSelector(state => state.booksReducer);
+  const [searchValue, setSearchValue] = useState('');
+  const handleSearchValue = e => {
+    setSearchValue(e.target.value);
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -26,7 +30,7 @@ function Header({ searchValue, handleSearchValue }) {
     if (searchValue.length === 0) {
       return alert('Пожалуйста, заполните поле ввода!');
     }
-    dispatch(fetchBooks());
+    dispatch(fetchBooks(searchValue));
     const response = await axios
       .get(`${API_URL}${searchValue}&startIndex=${startIndex}&maxResults=12&:keyes&key=${API_KEY}`)
       .then(res => dispatch(fetchBooksSuccess(res.data)))
@@ -64,7 +68,7 @@ const HeaderWrap = styled.header`
   background-position: center;
   background-size: cover;
   width: 100%;
-  height: 60vh;
+  height: 40vh;
   background-attachment: fixed;
   position: relative;
 `;
@@ -154,7 +158,7 @@ const SearchButton = styled.button`
 const LoaderBox = styled.div`
   position: absolute;
   left: 50%;
-  bottom: var(--big-offset);
+  bottom: var(--pre-big-offset);
   transform: translate(-50%, -50%);
   z-index: 30;
 `;

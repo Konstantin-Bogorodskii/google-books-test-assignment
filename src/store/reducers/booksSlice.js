@@ -6,14 +6,16 @@ const initialState = {
   isLoading: false,
   error: null,
   startIndex: 0,
+  searchValue: '',
 };
 
 export const booksSlice = createSlice({
   name: 'books',
   initialState,
   reducers: {
-    fetchBooks(state) {
+    fetchBooks(state, action) {
       state.isLoading = true;
+      state.searchValue = action.payload;
     },
     fetchBooksSuccess(state, action) {
       state.books = action.payload.items;
@@ -38,6 +40,7 @@ export const booksSlice = createSlice({
       state.isLoading = false;
       state.error = null;
       state.startIndex = 0;
+      state.searchValue = '';
     },
   },
 });

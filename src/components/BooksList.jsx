@@ -5,9 +5,12 @@ import BookItem from './BookItem';
 import { fetchBooks, fetchMoreBooks, fetchBooksError } from '../store/reducers/booksSlice';
 import { API_URL, API_KEY } from '../api/api';
 import axios from 'axios';
+import Header from './Header';
 
-function BooksList({ searchValue }) {
-  const { books, totalItems, startIndex, error } = useSelector(state => state.booksReducer);
+function BooksList() {
+  const { books, totalItems, startIndex, error, searchValue } = useSelector(
+    state => state.booksReducer
+  );
   const dispatch = useDispatch();
 
   if (error) {
@@ -24,27 +27,37 @@ function BooksList({ searchValue }) {
 
   if (books.length > 0) {
     return (
-      <Section>
-        <div className="container">
-          <TotalResults>{`Found ${totalItems} results`}</TotalResults>
-          <BooksWrap>
-            {books.map(book => {
-              return <BookItem book={book} key={book.id} />;
-            })}
-          </BooksWrap>
-          <ShowMore className="btn-reset" onClick={handleLoadMore}>
-            Show More
-          </ShowMore>
-        </div>
-      </Section>
+      <>
+        <Header />
+        <Section>
+          <div className="container">
+            <TotalResults>{`Found ${totalItems} results`}</TotalResults>
+            <BooksWrap>
+              {books.map(book => {
+                return <BookItem book={book} key={book.id} />;
+              })}
+            </BooksWrap>
+            <ShowMore className="btn-reset" onClick={handleLoadMore}>
+              Show More
+            </ShowMore>
+          </div>
+        </Section>
+      </>
     );
   } else {
-    return <h1>Начните поиск...</h1>;
+    return (
+      <>
+        <Header />
+        <Section></Section>
+      </>
+    );
   }
 }
 
 const Section = styled.section`
   padding: var(--main-offset) 0;
+  background: var(--color-alto);
+  min-height: 60vh;
 `;
 const TotalResults = styled.h2`
   margin: 0;
