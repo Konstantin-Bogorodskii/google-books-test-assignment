@@ -4,31 +4,33 @@ import axios from 'axios';
 import HeaderSelects from './HeaderSelects';
 import { API_URL, API_KEY } from '../api/api';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchBooks, fetchBooksSuccess, fetchBooksError } from '../store/reducers/booksSlice';
+import {
+  fetchBooks,
+  fetchBooksSuccess,
+  fetchBooksError,
+  clearBooksState,
+} from '../store/reducers/booksSlice';
 import Loader from '../UI/Loader';
 
-function Header() {
-  const [searchValue, setSearchValue] = useState('');
+function Header({ searchValue, handleSearchValue }) {
   const dispatch = useDispatch();
-  const { isLoading } = useSelector(state => state.booksReducer);
+  const { books, isLoading, startIndex } = useSelector(state => state.booksReducer);
 
   const handleSubmit = async e => {
     e.preventDefault();
+
+    if (books.length > 0) {
+      dispatch(clearBooksState());
+    }
 
     if (searchValue.length === 0) {
       return alert('Пожалуйста, заполните поле ввода!');
     }
     dispatch(fetchBooks());
-    setTimeout(() => {
-      const response = axios
-        .get(`${API_URL}${searchValue}&:keyes&key=${API_KEY}`)
-        .then(res => dispatch(fetchBooksSuccess(res.data)))
-        .catch(err => dispatch(fetchBooksError(err.message)));
-    }, 500);
-  };
-
-  const handleSearchValue = e => {
-    setSearchValue(e.target.value);
+    const response = await axios
+      .get(`${API_URL}${searchValue}&startIndex=${startIndex}&maxResults=12&:keyes&key=${API_KEY}`)
+      .then(res => dispatch(fetchBooksSuccess(res.data)))
+      .catch(err => dispatch(fetchBooksError(err.message)));
   };
 
   return (

@@ -2,14 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 
 function BookItem({ book }) {
-  const { title, authors = [], imageLinks = null, categories = [''] } = book.volumeInfo;
+  const {
+    title,
+    authors = [],
+    imageLinks = { smallThumbnail: '' },
+    categories = [''],
+  } = book.volumeInfo;
   return (
     <Wrap>
       <img src={imageLinks.smallThumbnail} alt={title} />
       <BookText>
-        <Category>{categories[0]}</Category>
+        <Category>{String(categories).split(/[\&,]+/)[0]}</Category>
         <h3>{title}</h3>
-        <p>{authors.join(',')}</p>
+        <p>{authors.join(', ')}</p>
       </BookText>
     </Wrap>
   );
@@ -28,6 +33,7 @@ const Wrap = styled.div`
     display: block;
     width: 100%;
     object-fit: contain;
+    height: 23rem;
     margin-bottom: var(--second-offset);
   }
 

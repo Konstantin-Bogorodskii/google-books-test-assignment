@@ -81,3 +81,10 @@ a:focus {
   padding: 0 15px;
   max-width: 1210px;
 }
+
+.btn-reset {
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
