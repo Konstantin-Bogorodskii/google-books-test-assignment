@@ -39,7 +39,7 @@ const Select = styled.select`
   position: relative;
   width: 15rem;
   margin: 0;
-  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  padding: 0.4rem 0.5rem 0.6rem 1rem;
   height: 2.8rem;
   font: var(--normal-small-font);
   color: var(--color-grey);

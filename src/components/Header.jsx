@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import HeaderSelects from './HeaderSelects';
 import { API_URL, API_KEY } from '../api/api';
-import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { getBooks } from '../store/reducers/booksSlice';
-import BooksList from './BooksList';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBooks, fetchBooksSuccess, fetchBooksError } from '../store/reducers/booksSlice';
+import Loader from '../UI/Loader';
 
 function Header() {
   const [searchValue, setSearchValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const { isLoading } = useSelector(state => state.booksReducer);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -18,13 +18,12 @@ function Header() {
     if (searchValue.length === 0) {
       return alert('Пожалуйста, заполните поле ввода!');
     }
-    setIsLoading(true);
+    dispatch(fetchBooks());
     setTimeout(() => {
       const response = axios
         .get(`${API_URL}${searchValue}&:keyes&key=${API_KEY}`)
-        .then(res => dispatch(getBooks(res.data)))
-        .catch(err => alert(err.message))
-        .finally(() => setIsLoading(false));
+        .then(res => dispatch(fetchBooksSuccess(res.data)))
+        .catch(err => dispatch(fetchBooksError(err.message)));
     }, 500);
   };
 
@@ -49,7 +48,7 @@ function Header() {
           </SearchButton>
         </SearchForm>
         <HeaderSelects />
-        {isLoading ? <h1>Идёт загрузка</h1> : <BooksList />}
+        <LoaderBox>{isLoading ? <Loader /> : null}</LoaderBox>
       </Wrap>
     </HeaderWrap>
   );
@@ -63,7 +62,7 @@ const HeaderWrap = styled.header`
   background-position: center;
   background-size: cover;
   width: 100%;
-  height: 80vh;
+  height: 60vh;
   background-attachment: fixed;
   position: relative;
 `;
@@ -148,4 +147,12 @@ const SearchButton = styled.button`
     opacity: 0.7;
     background: var(--color-blue);
   }
+`;
+
+const LoaderBox = styled.div`
+  position: absolute;
+  left: 50%;
+  bottom: var(--big-offset);
+  transform: translate(-50%, -50%);
+  z-index: 30;
 `;
