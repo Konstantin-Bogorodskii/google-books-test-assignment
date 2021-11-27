@@ -5,7 +5,6 @@ import BookItem from './BookItem';
 import { fetchBooks, fetchMoreBooks, fetchBooksError } from '../store/reducers/booksSlice';
 import { API_URL, API_KEY } from '../api/api';
 import axios from 'axios';
-import Header from './Header';
 
 function BooksList() {
   const { books, totalItems, startIndex, error, searchValue } = useSelector(
@@ -27,27 +26,23 @@ function BooksList() {
 
   if (books.length > 0) {
     return (
-      <>
-        <Header />
-        <Section>
-          <div className="container">
-            <TotalResults>{`Found ${totalItems} results`}</TotalResults>
-            <BooksWrap>
-              {books.map(book => {
-                return <BookItem book={book} key={book.id} />;
-              })}
-            </BooksWrap>
-            <ShowMore className="btn-reset" onClick={handleLoadMore}>
-              Show More
-            </ShowMore>
-          </div>
-        </Section>
-      </>
+      <Section>
+        <div className="container">
+          <TotalResults>{`Found ${totalItems} results`}</TotalResults>
+          <BooksWrap>
+            {books.map(book => {
+              return <BookItem book={book} key={book.id} />;
+            })}
+          </BooksWrap>
+          <ShowMore className="btn-reset" onClick={handleLoadMore}>
+            Show More
+          </ShowMore>
+        </div>
+      </Section>
     );
   } else {
     return (
       <>
-        <Header />
         <Section></Section>
       </>
     );

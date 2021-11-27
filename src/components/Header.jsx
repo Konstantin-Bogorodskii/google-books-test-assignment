@@ -11,9 +11,11 @@ import {
   clearBooksState,
 } from '../store/reducers/booksSlice';
 import Loader from '../UI/Loader';
+import { useHistory } from 'react-router-dom';
 
 function Header() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { books, isLoading, startIndex } = useSelector(state => state.booksReducer);
   const [searchValue, setSearchValue] = useState('');
   const handleSearchValue = e => {
@@ -25,6 +27,7 @@ function Header() {
 
     if (books.length > 0) {
       dispatch(clearBooksState());
+      history.push('/');
     }
 
     if (searchValue.length === 0) {

@@ -5,30 +5,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../UI/Loader';
 import { API_BOOK, API_KEY } from '../api/api';
 import axios from 'axios';
-import Header from './Header';
 import styled from 'styled-components';
 
 function BookDetail() {
-  const { book, isLoading, error } = useSelector(state => state.bookReducer);
-
-  //   extraLarge:
-  // large:
-  // medium:
-  // small:
-  // smallThumbnail:
-  // thumbnail:
-
   const { bookID } = useParams();
   const dispatch = useDispatch();
 
   const fetchSelectedProduct = async () => {
     dispatch(fetchBook());
-    setTimeout(() => {
-      const response = axios
-        .get(`${API_BOOK}${bookID}?key=${API_KEY}`)
-        .then(res => dispatch(fetchBookSuccess(res.data)))
-        .catch(err => dispatch(fetchBookError(err.message)));
-    }, 1000);
+    const response = await axios
+      .get(`${API_BOOK}${bookID}?key=${API_KEY}`)
+      .then(res => dispatch(fetchBookSuccess(res.data)))
+      .catch(err => dispatch(fetchBookError(err.message)));
   };
 
   useEffect(() => {
@@ -37,39 +25,37 @@ function BookDetail() {
     }
   }, []);
 
-  if (isLoading) {
+  const { book, isLoading, error } = useSelector(state => state.bookReducer);
+
+  if (!isLoading && book) {
+    const {
+      title = '',
+      authors = [],
+      imageLinks = { smallThumbnail: '' },
+      categories = [''],
+      description = '',
+    } = book.volumeInfo;
+
+    return (
+      <Section>
+        <Wrap className="container">
+          <Img>
+            <img src={imageLinks.smallThumbnail || imageLinks.thumbnail} alt={title} />
+          </Img>
+          <BookText>
+            <Category>{categories.toString()}</Category>
+            <h3>{title}</h3>
+            <p>{authors.join(', ')}</p>
+            <p>{description}</p>
+          </BookText>
+        </Wrap>
+      </Section>
+    );
+  } else {
     return (
       <LoaderBox>
         <Loader />
       </LoaderBox>
-    );
-  } else {
-    // const {
-    //   title = '',
-    //   authors = [],
-    //   imageLinks = { smallThumbnail: '' },
-    //   categories = [''],
-    //   description = '',
-    // } = book.volumeInfo;
-    console.log(book.volumeInfo);
-
-    return (
-      <>
-        <Header />
-        <Section>
-          <Wrap className="container">
-            {/* <Img>
-              <img src={imageLinks.large} alt={title} />
-            </Img>
-            <BookText>
-              <Category>{categories.toSting()}</Category>
-              <h3>{title}</h3>
-              <p>{authors.join(', ')}</p>
-              <p>{description}</p>
-            </BookText> */}
-          </Wrap>
-        </Section>
-      </>
     );
   }
 }
@@ -92,22 +78,45 @@ const Section = styled.section`
 const Wrap = styled.div`
   display: flex;
   justify-content: space-between;
+  width: 100%;
 `;
 const Img = styled.div`
-  width: calc(60% - var(--pre-big-offset));
-  height: 40rem;
+  width: 100%;
+  height: 45rem;
+  background: white;
+  max-width: 35rem;
+  padding: var(--pre-big-offset);
 
   img {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 `;
 const BookText = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 60rem;
+
+  h3 {
+    margin: 0;
+    margin-bottom: var(--second-offset);
+    font: var(--bold-title);
+    color: #000;
+  }
+
+  p {
+    margin: 0;
+    margin: var(--small-offset);
+    font: var(--normal-small-font);
+    color: var(--color-dark);
+  }
 `;
-const Category = styled.div``;
+const Category = styled.div`
+  margin-bottom: var(--second-offset);
+  color: var(--color-grey);
+  font: var(--bold-main-font);
+`;
 
 export default BookDetail;
