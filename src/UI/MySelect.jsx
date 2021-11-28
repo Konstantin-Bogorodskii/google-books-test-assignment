@@ -1,18 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function MySelect({ options, defaultValue, id, label, value, onChange }) {
+function MySelect({ options, id, label, value, onChange }) {
   return (
     <Wrap>
       <Label htmlFor={id}>{label}</Label>
       <Select value={value} id={id} onChange={onChange}>
-        <Option value={defaultValue}>
-          {defaultValue[0].toUpperCase() + defaultValue.slice(1)}
-        </Option>
         {options.map(option => {
           return (
             <Option key={option.value} value={option.value}>
-              {option.value[0].toUpperCase() + option.value.slice(1)}
+              {option.text}
             </Option>
           );
         })}

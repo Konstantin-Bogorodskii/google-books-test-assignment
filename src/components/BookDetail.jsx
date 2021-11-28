@@ -36,6 +36,10 @@ function BookDetail() {
       description = '',
     } = book.volumeInfo;
 
+    if (error) {
+      return <h1>{error}</h1>;
+    }
+
     return (
       <Section>
         <Wrap className="container">
@@ -53,21 +57,12 @@ function BookDetail() {
     );
   } else {
     return (
-      <LoaderBox>
+      <Section style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Loader />
-      </LoaderBox>
+      </Section>
     );
   }
 }
-
-const LoaderBox = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-alto);
-`;
 
 const Section = styled.section`
   padding: var(--main-offset) 0;
@@ -78,6 +73,7 @@ const Section = styled.section`
 const Wrap = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   width: 100%;
 `;
 const Img = styled.div`
@@ -86,6 +82,15 @@ const Img = styled.div`
   background: white;
   max-width: 35rem;
   padding: var(--pre-big-offset);
+  margin-right: var(--second-offset);
+
+  @media (max-width: 999px) {
+    margin-bottom: var(--second-offset);
+  }
+
+  @media (max-width: 500px) {
+    margin-right: 0;
+  }
 
   img {
     display: block;
@@ -104,11 +109,15 @@ const BookText = styled.div`
     margin-bottom: var(--second-offset);
     font: var(--bold-title);
     color: #000;
+
+    @media (max-width: 500px) {
+      font-size: 3rem;
+    }
   }
 
   p {
     margin: 0;
-    margin: var(--small-offset);
+    margin-bottom: var(--small-offset);
     font: var(--normal-small-font);
     color: var(--color-dark);
   }

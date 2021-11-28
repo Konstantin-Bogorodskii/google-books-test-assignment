@@ -1,42 +1,46 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import MySelect from '../UI/MySelect';
+import { useDispatch } from 'react-redux';
+import { changeSort, changeCategory } from '../store/reducers/booksSlice';
 
 function HeaderSelects() {
-  const [categorie, setCategorie] = useState('all');
-  const [sort, setSort] = useState('relevance');
+  const [category, setCategory] = useState('');
+  const [sort, setSort] = useState('');
+  const dispatch = useDispatch();
 
-  const handleCategorie = e => {
-    setCategorie(e.target.value);
-    // setBooks([...books].sort((a, b) => a[e.target.value].localCompare()))
+  const handleCategory = e => {
+    setCategory(e.target.value);
+    dispatch(changeCategory(e.target.value));
   };
 
   const handleSort = e => {
     setSort(e.target.value);
+    dispatch(changeSort(e.target.value));
   };
-
-  console.log(categorie, sort);
 
   return (
     <SelectsGroup>
       <MySelect
         options={[
-          { value: 'art' },
-          { value: 'biography' },
-          { value: 'computers' },
-          { value: 'history' },
-          { value: 'medical' },
-          { value: 'poetry' },
+          { value: '', text: 'All' },
+          { value: 'art', text: 'Art' },
+          { value: 'biography', text: 'Biography' },
+          { value: 'computers', text: 'Computers' },
+          { value: 'history', text: 'History' },
+          { value: 'medical', text: 'Medical' },
+          { value: 'poetry', text: 'Poetry' },
         ]}
-        defaultValue="all"
         id="categories"
         label="Categories"
-        value={categorie}
-        onChange={handleCategorie}
+        value={category}
+        onChange={handleCategory}
       />
       <MySelect
-        options={[{ value: 'newest' }]}
-        defaultValue="relevance"
+        options={[
+          { value: 'relevance', text: 'Relevance' },
+          { value: 'newest', text: 'Newest' },
+        ]}
         id="sortby"
         label="Sort by"
         value={sort}

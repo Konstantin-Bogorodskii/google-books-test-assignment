@@ -7,6 +7,8 @@ const initialState = {
   error: null,
   startIndex: 0,
   searchValue: '',
+  category: '',
+  sortedBy: 'relevance',
 };
 
 export const booksSlice = createSlice({
@@ -34,6 +36,13 @@ export const booksSlice = createSlice({
       state.startIndex = state.startIndex + 30;
       state.error = null;
     },
+    changeSort(state, action) {
+      state.sortedBy = action.payload;
+    },
+    changeCategory(state, action) {
+      state.category = action.payload;
+    },
+
     clearBooksState(state) {
       state.books = [];
       state.totalItems = null;
@@ -45,7 +54,14 @@ export const booksSlice = createSlice({
   },
 });
 
-export const { fetchBooks, fetchBooksSuccess, fetchBooksError, fetchMoreBooks, clearBooksState } =
-  booksSlice.actions;
+export const {
+  fetchBooks,
+  fetchBooksSuccess,
+  fetchBooksError,
+  fetchMoreBooks,
+  clearBooksState,
+  changeSort,
+  changeCategory,
+} = booksSlice.actions;
 
 export default booksSlice.reducer;

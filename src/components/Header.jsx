@@ -10,13 +10,16 @@ import {
   fetchBooksError,
   clearBooksState,
 } from '../store/reducers/booksSlice';
-import Loader from '../UI/Loader';
 import { useHistory } from 'react-router-dom';
 
 function Header() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { books, isLoading, startIndex } = useSelector(state => state.booksReducer);
+  const { books, isLoading, startIndex, category, sortedBy } = useSelector(
+    state => state.booksReducer
+  );
+
+  console.log(books);
   const [searchValue, setSearchValue] = useState('');
   const handleSearchValue = e => {
     setSearchValue(e.target.value);
@@ -33,9 +36,24 @@ function Header() {
     if (searchValue.length === 0) {
       return alert('Пожалуйста, заполните поле ввода!');
     }
+
+    let subject;
+    if (category === '') {
+      subject = '';
+    } else {
+      subject = `+subject:${category}`;
+    }
+
+    console.log(
+      `${API_URL}${searchValue}${subject}&orderBy=${sortedBy}&startIndex=${startIndex}&maxResults=30&key=${API_KEY}`
+    );
+
     dispatch(fetchBooks(searchValue));
+
     const response = await axios
-      .get(`${API_URL}${searchValue}&startIndex=${startIndex}&maxResults=12&:keyes&key=${API_KEY}`)
+      .get(
+        `${API_URL}${searchValue}${subject}&orderBy=${sortedBy}&startIndex=${startIndex}&maxResults=12&:keyes&key=${API_KEY}`
+      )
       .then(res => dispatch(fetchBooksSuccess(res.data)))
       .catch(err => dispatch(fetchBooksError(err.message)));
   };
@@ -57,7 +75,6 @@ function Header() {
           </SearchButton>
         </SearchForm>
         <HeaderSelects />
-        <LoaderBox>{isLoading ? <Loader /> : null}</LoaderBox>
       </Wrap>
     </HeaderWrap>
   );
@@ -156,12 +173,4 @@ const SearchButton = styled.button`
     opacity: 0.7;
     background: var(--color-blue);
   }
-`;
-
-const LoaderBox = styled.div`
-  position: absolute;
-  left: 50%;
-  bottom: var(--pre-big-offset);
-  transform: translate(-50%, -50%);
-  z-index: 30;
 `;

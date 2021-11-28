@@ -5,11 +5,11 @@ import BookItem from './BookItem';
 import { fetchBooks, fetchMoreBooks, fetchBooksError } from '../store/reducers/booksSlice';
 import { API_URL, API_KEY } from '../api/api';
 import axios from 'axios';
+import Loader from '../UI/Loader';
 
 function BooksList() {
-  const { books, totalItems, startIndex, error, searchValue } = useSelector(
-    state => state.booksReducer
-  );
+  const { books, totalItems, startIndex, error, isLoading, searchValue, sortedBy, category } =
+    useSelector(state => state.booksReducer);
   const dispatch = useDispatch();
 
   if (error) {
@@ -17,9 +17,23 @@ function BooksList() {
   }
 
   const handleLoadMore = async () => {
-    dispatch(fetchBooks());
+    dispatch(fetchBooks(searchValue));
+
+    let subject;
+    if (category === '') {
+      subject = '';
+    } else {
+      subject = `+subject:${category}`;
+    }
+
+    console.log(
+      `${API_URL}${searchValue}${subject}&orderBy=${sortedBy}&startIndex=${startIndex}&maxResults=30&:keyes&key=${API_KEY}`
+    );
+
     const response = await axios
-      .get(`${API_URL}${searchValue}&startIndex=${startIndex}&maxResults=30&:keyes&key=${API_KEY}`)
+      .get(
+        `${API_URL}${searchValue}${subject}&orderBy=${sortedBy}&startIndex=${startIndex}&maxResults=30&key=${API_KEY}`
+      )
       .then(res => dispatch(fetchMoreBooks(res.data)))
       .catch(err => dispatch(fetchBooksError(err.message)));
   };
@@ -31,7 +45,7 @@ function BooksList() {
           <TotalResults>{`Found ${totalItems} results`}</TotalResults>
           <BooksWrap>
             {books.map(book => {
-              return <BookItem book={book} key={book.id} />;
+              return <BookItem book={book} key={book.etag} />;
             })}
           </BooksWrap>
           <ShowMore className="btn-reset" onClick={handleLoadMore}>
@@ -40,12 +54,14 @@ function BooksList() {
         </div>
       </Section>
     );
-  } else {
+  } else if (isLoading) {
     return (
-      <>
-        <Section></Section>
-      </>
+      <Section style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Loader />
+      </Section>
     );
+  } else {
+    return <Section></Section>;
   }
 }
 
@@ -67,6 +83,18 @@ const BooksWrap = styled.div`
   grid-template-columns: repeat(4, 1fr);
   grid-gap: var(--second-offset);
   align-items: flex-start;
+
+  @media (max-width: 1050px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 570px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const ShowMore = styled.button`

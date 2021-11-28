@@ -12,7 +12,7 @@ function BookItem({ book }) {
   return (
     <Link to={`/book/${book.id}`}>
       <Wrap>
-        <img src={imageLinks.smallThumbnail} alt={title} />
+        <img src={imageLinks.smallThumbnail || imageLinks.thumbnail} alt={title} />
         <BookText>
           <Category>{String(categories).split(/[\&,]+/)[0]}</Category>
           <h3>{title}</h3>
