@@ -44,10 +44,6 @@ function Header() {
       subject = `+subject:${category}`;
     }
 
-    console.log(
-      `${API_URL}${searchValue}${subject}&orderBy=${sortedBy}&startIndex=${startIndex}&maxResults=30&key=${API_KEY}`
-    );
-
     dispatch(fetchBooks(searchValue));
 
     const response = await axios

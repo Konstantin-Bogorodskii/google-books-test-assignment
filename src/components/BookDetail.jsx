@@ -31,7 +31,10 @@ function BookDetail() {
     const {
       title = '',
       authors = [],
-      imageLinks = { smallThumbnail: '' },
+      imageLinks = {
+        smallThumbnail:
+          'https://vignette.wikia.nocookie.net/pandorahearts/images/a/ad/Not_available.jpg',
+      },
       categories = [''],
       description = '',
     } = book.volumeInfo;

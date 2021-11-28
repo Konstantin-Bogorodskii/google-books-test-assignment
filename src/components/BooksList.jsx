@@ -26,10 +26,6 @@ function BooksList() {
       subject = `+subject:${category}`;
     }
 
-    console.log(
-      `${API_URL}${searchValue}${subject}&orderBy=${sortedBy}&startIndex=${startIndex}&maxResults=30&:keyes&key=${API_KEY}`
-    );
-
     const response = await axios
       .get(
         `${API_URL}${searchValue}${subject}&orderBy=${sortedBy}&startIndex=${startIndex}&maxResults=30&key=${API_KEY}`
